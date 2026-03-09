@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
+import { magicLinkRequestSchema } from "@/lib/validation/user-schema"
 export default function SignInPage() {
   const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -17,6 +18,13 @@ export default function SignInPage() {
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+
+    const result = magicLinkRequestSchema.safeParse({ email })
+    if (!result.success) {
+      setError(result.error.issues[0].message)
+      return
+    }
+
     setIsLoading(true)
     try {
       const supabase = createClient()

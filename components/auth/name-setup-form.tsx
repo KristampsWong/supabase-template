@@ -11,12 +11,10 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { createClient } from "@/lib/supabase/client"
-
-const nameSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name is too long"),
-})
-
-type NameFormValues = z.infer<typeof nameSchema>
+import {
+  type UserNameFormValues,
+  userNameSchema,
+} from "@/lib/validation/user-schema"
 
 export function NameSetupForm() {
   const router = useRouter()
@@ -27,14 +25,14 @@ export function NameSetupForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<NameFormValues>({
-    resolver: zodResolver(nameSchema),
+  } = useForm<UserNameFormValues>({
+    resolver: zodResolver(userNameSchema),
     defaultValues: {
       name: "",
     },
   })
 
-  const onSubmit = async (values: NameFormValues) => {
+  const onSubmit = async (values: UserNameFormValues) => {
     setIsPending(true)
     try {
       const supabase = createClient()
