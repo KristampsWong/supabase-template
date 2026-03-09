@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { SignOutButton } from '@/components/auth/sign-out-button'
+import { NameSetupForm } from '@/components/auth/name-setup-form'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -10,8 +11,16 @@ export default async function DashboardPage() {
     redirect('/sign-in')
   }
 
-  const name = user.user_metadata?.full_name || 'User'
+  const name = user.user_metadata?.full_name
   const email = user.email
+
+  if (!name) {
+    return (
+   
+          <NameSetupForm />
+  
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center">

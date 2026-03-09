@@ -1,21 +1,13 @@
 "use client"
 
-import { Loader2 } from "lucide-react"
-import { useState } from "react"
-
 import { Button } from "@/components/ui/button"
 import { createClient } from '@/lib/supabase/client'
+
 interface GoogleSignInProps {
-  callbackURL ?: string;
   className ?: string;
 }
 
-export function GoogleSignIn({
-  callbackURL = "/",
-  className,
-} : GoogleSignInProps) {
-  const [isLoading, setIsLoading] = useState(false)
-
+export function GoogleSignIn({ className } : GoogleSignInProps) {
   const handleGoogleSignIn = async () => {
     const supabase = createClient()
     await supabase.auth.signInWithOAuth({
@@ -32,14 +24,10 @@ export function GoogleSignIn({
       variant="outline"
       className={`w-full ${className ?? ""}`}
       onClick={handleGoogleSignIn}
-      disabled={isLoading}
+      disabled
     >
-      {isLoading ? (
-        <Loader2 className="animate-spin" />
-      ) : (
-        <GoogleIcon />
-      )}
-      {isLoading ? "Signing in..." : "Continue with Google"}
+      <GoogleIcon />
+      Continue with Google
     </Button>
   )
 }
